@@ -1,0 +1,22 @@
+<form class="card" style="max-width: 420px" [formGroup]="form" (ngSubmit)="submit()">
+  <h1>Nova unidade</h1>
+
+  <div class="form-row">
+    <label for="codigo">Código</label>
+    <input id="codigo" type="text" formControlName="codigo" />
+  </div>
+
+  <div class="form-row">
+    <label for="nome">Nome</label>
+    <input id="nome" type="text" formControlName="nome" />
+  </div>
+
+  @if (errorMessage()) {
+    <p class="error-message">{{ errorMessage() }}</p>
+  }
+
+  <div class="form-actions">
+    <button type="submit" [disabled]="loading()">Salvar</button>
+    <a routerLink="/unidades"><button type="button" class="secondary">Cancelar</button></a>
+  </div>
+</form>

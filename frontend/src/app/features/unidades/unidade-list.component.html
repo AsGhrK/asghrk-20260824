@@ -1,0 +1,58 @@
+<div class="card">
+  <div class="list-header">
+    <h1>Unidades</h1>
+    <a routerLink="/unidades/novo"><button type="button">Nova unidade</button></a>
+  </div>
+
+  @if (loading()) {
+    <p>Carregando...</p>
+  } @else if (unidades().length === 0) {
+    <p>Nenhuma unidade cadastrada.</p>
+  } @else {
+    <table>
+      <thead>
+        <tr>
+          <th>Código</th>
+          <th>Nome</th>
+          <th>Status</th>
+          <th>Colaboradores</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (unidade of unidades(); track unidade.id) {
+          <tr>
+            <td>{{ unidade.codigo }}</td>
+            <td>{{ unidade.nome }}</td>
+            <td>
+              <span class="status-badge" [class.ativo]="unidade.ativo" [class.inativo]="!unidade.ativo">
+                {{ unidade.ativo ? 'Ativa' : 'Inativa' }}
+              </span>
+            </td>
+            <td>
+              <button type="button" class="secondary" (click)="toggleExpand(unidade.id)">
+                {{ unidade.colaboradores.length }} colaborador(es)
+              </button>
+            </td>
+            <td>
+              <button type="button" [class.danger]="unidade.ativo" (click)="alternarStatus(unidade)">
+                {{ unidade.ativo ? 'Inativar' : 'Reativar' }}
+              </button>
+            </td>
+          </tr>
+          @if (expandedId() === unidade.id && unidade.colaboradores.length > 0) {
+            <tr>
+              <td colspan="5">
+                <ul class="colaboradores-inline">
+                  @for (colaborador of unidade.colaboradores; track colaborador.id) {
+                    <li>{{ colaborador.codigo }} — {{ colaborador.nome }}</li>
+                  }
+                </ul>
+              </td>
+            </tr>
+          }
+        }
+      </tbody>
+    </table>
+  }
+</div>
