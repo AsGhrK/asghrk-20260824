@@ -1,0 +1,24 @@
+<div class="login-wrapper">
+  <form class="card login-card" [formGroup]="form" (ngSubmit)="submit()">
+    <h1>Gestão de Colaboradores</h1>
+    <p class="subtitle">Entre com seu login e senha</p>
+
+    <div class="form-row">
+      <label for="login">Login</label>
+      <input id="login" type="text" formControlName="login" autocomplete="username" />
+    </div>
+
+    <div class="form-row">
+      <label for="senha">Senha</label>
+      <input id="senha" type="password" formControlName="senha" autocomplete="current-password" />
+    </div>
+
+    @if (errorMessage()) {
+      <p class="error-message">{{ errorMessage() }}</p>
+    }
+
+    <button type="submit" [disabled]="loading()">
+      {{ loading() ? 'Entrando...' : 'Entrar' }}
+    </button>
+  </form>
+</div>
