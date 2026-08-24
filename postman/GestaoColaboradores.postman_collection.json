@@ -1,0 +1,274 @@
+{
+  "info": {
+    "_postman_id": "e4a6b1f0-1a2b-4c3d-9e8f-gestao-colaboradores",
+    "name": "Sistema de Gestão de Colaboradores e Unidades",
+    "description": "Coleção de testes manuais da API (login + CRUD de Usuários, Unidades e Colaboradores).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }]
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"login\": \"admin\",\n  \"senha\": \"senha123\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/auth/login", "host": ["{{baseUrl}}"], "path": ["api", "auth", "login"] }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const body = pm.response.json();",
+                  "    pm.environment.set('token', body.token);",
+                  "}",
+                  "pm.test('Login retorna 200 e token', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "    pm.expect(pm.response.json().token).to.be.a('string');",
+                  "});"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Usuarios",
+      "item": [
+        {
+          "name": "Criar Usuário",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"codigo\": \"U001\",\n  \"login\": \"admin\",\n  \"senha\": \"senha123\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/usuarios", "host": ["{{baseUrl}}"], "path": ["api", "usuarios"] }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    pm.environment.set('usuarioId', pm.response.json().id);",
+                  "}",
+                  "pm.test('Usuário criado com sucesso', function () { pm.response.to.have.status(201); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Atualizar Usuário (senha/status)",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"senha\": \"novaSenha123\",\n  \"ativo\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/usuarios/{{usuarioId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "usuarios", "{{usuarioId}}"]
+            }
+          }
+        },
+        {
+          "name": "Listar Usuários",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/usuarios", "host": ["{{baseUrl}}"], "path": ["api", "usuarios"] }
+          }
+        },
+        {
+          "name": "Listar Usuários (filtro por status)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/usuarios?ativo=true",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "usuarios"],
+              "query": [{ "key": "ativo", "value": "true" }]
+            }
+          }
+        },
+        {
+          "name": "Obter Usuário por Id",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/usuarios/{{usuarioId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "usuarios", "{{usuarioId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Unidades",
+      "item": [
+        {
+          "name": "Criar Unidade",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"codigo\": \"UN001\",\n  \"nome\": \"Filial Centro\"\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/unidades", "host": ["{{baseUrl}}"], "path": ["api", "unidades"] }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    pm.environment.set('unidadeId', pm.response.json().id);",
+                  "}",
+                  "pm.test('Unidade criada com sucesso', function () { pm.response.to.have.status(201); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Inativar Unidade",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"ativo\": false\n}" },
+            "url": {
+              "raw": "{{baseUrl}}/api/unidades/{{unidadeId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "unidades", "{{unidadeId}}"]
+            }
+          }
+        },
+        {
+          "name": "Reativar Unidade",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"ativo\": true\n}" },
+            "url": {
+              "raw": "{{baseUrl}}/api/unidades/{{unidadeId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "unidades", "{{unidadeId}}"]
+            }
+          }
+        },
+        {
+          "name": "Listar Unidades (com colaboradores)",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/unidades", "host": ["{{baseUrl}}"], "path": ["api", "unidades"] }
+          }
+        },
+        {
+          "name": "Obter Unidade por Id",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/unidades/{{unidadeId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "unidades", "{{unidadeId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Colaboradores",
+      "item": [
+        {
+          "name": "Criar Colaborador",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"codigo\": \"C001\",\n  \"nome\": \"João Silva\",\n  \"unidadeId\": {{unidadeId}},\n  \"usuarioId\": {{usuarioId}}\n}"
+            },
+            "url": { "raw": "{{baseUrl}}/api/colaboradores", "host": ["{{baseUrl}}"], "path": ["api", "colaboradores"] }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    pm.environment.set('colaboradorId', pm.response.json().id);",
+                  "}",
+                  "pm.test('Colaborador criado com sucesso', function () { pm.response.to.have.status(201); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Atualizar Colaborador (nome/unidade)",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nome\": \"João da Silva\",\n  \"unidadeId\": {{unidadeId}}\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/colaboradores/{{colaboradorId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "colaboradores", "{{colaboradorId}}"]
+            }
+          }
+        },
+        {
+          "name": "Listar Colaboradores",
+          "request": {
+            "method": "GET",
+            "url": { "raw": "{{baseUrl}}/api/colaboradores", "host": ["{{baseUrl}}"], "path": ["api", "colaboradores"] }
+          }
+        },
+        {
+          "name": "Obter Colaborador por Id",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/colaboradores/{{colaboradorId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "colaboradores", "{{colaboradorId}}"]
+            }
+          }
+        },
+        {
+          "name": "Remover Colaborador",
+          "request": {
+            "method": "DELETE",
+            "url": {
+              "raw": "{{baseUrl}}/api/colaboradores/{{colaboradorId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "colaboradores", "{{colaboradorId}}"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
