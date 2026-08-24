@@ -1,0 +1,46 @@
+<form class="card" style="max-width: 420px" [formGroup]="form" (ngSubmit)="submit()">
+  <h1>{{ isEdit() ? 'Editar colaborador' : 'Novo colaborador' }}</h1>
+
+  <div class="form-row">
+    <label for="codigo">Código</label>
+    <input id="codigo" type="text" formControlName="codigo" />
+  </div>
+
+  <div class="form-row">
+    <label for="nome">Nome</label>
+    <input id="nome" type="text" formControlName="nome" />
+  </div>
+
+  <div class="form-row">
+    <label for="unidadeId">Unidade</label>
+    <select id="unidadeId" formControlName="unidadeId">
+      <option [ngValue]="null" disabled>Selecione...</option>
+      @for (unidade of unidadesSelecionaveis(); track unidade.id) {
+        <option [ngValue]="unidade.id">{{ unidade.nome }} {{ unidade.ativo ? '' : '(inativa)' }}</option>
+      }
+    </select>
+  </div>
+
+  @if (!isEdit()) {
+    <div class="form-row">
+      <label for="usuarioId">Usuário</label>
+      <select id="usuarioId" formControlName="usuarioId">
+        <option [ngValue]="null" disabled>Selecione...</option>
+        @for (usuario of usuarios(); track usuario.id) {
+          <option [ngValue]="usuario.id">{{ usuario.login }}</option>
+        }
+      </select>
+    </div>
+  } @else {
+    <p class="hint">Usuário vinculado: <strong>{{ usuarioAtualLogin() }}</strong> (não pode ser alterado)</p>
+  }
+
+  @if (errorMessage()) {
+    <p class="error-message">{{ errorMessage() }}</p>
+  }
+
+  <div class="form-actions">
+    <button type="submit" [disabled]="loading()">Salvar</button>
+    <a routerLink="/colaboradores"><button type="button" class="secondary">Cancelar</button></a>
+  </div>
+</form>

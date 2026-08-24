@@ -1,0 +1,38 @@
+<div class="card">
+  <div class="list-header">
+    <h1>Colaboradores</h1>
+    <a routerLink="/colaboradores/novo"><button type="button">Novo colaborador</button></a>
+  </div>
+
+  @if (loading()) {
+    <p>Carregando...</p>
+  } @else if (colaboradores().length === 0) {
+    <p>Nenhum colaborador cadastrado.</p>
+  } @else {
+    <table>
+      <thead>
+        <tr>
+          <th>Código</th>
+          <th>Nome</th>
+          <th>Unidade</th>
+          <th>Usuário</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (colaborador of colaboradores(); track colaborador.id) {
+          <tr>
+            <td>{{ colaborador.codigo }}</td>
+            <td>{{ colaborador.nome }}</td>
+            <td>{{ colaborador.unidadeNome }}</td>
+            <td>{{ colaborador.usuarioLogin }}</td>
+            <td class="row-actions">
+              <a [routerLink]="['/colaboradores', colaborador.id, 'editar']">Editar</a>
+              <button type="button" class="danger" (click)="remover(colaborador)">Remover</button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</div>
