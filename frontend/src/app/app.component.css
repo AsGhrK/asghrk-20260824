@@ -1,0 +1,34 @@
+.app-nav {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 0.9rem 1.5rem;
+  background: #111827;
+  color: #fff;
+}
+
+.app-nav .brand {
+  font-weight: 700;
+  margin-right: 0.5rem;
+}
+
+.app-nav a {
+  color: #cbd5e1;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+.app-nav a.active,
+.app-nav a:hover {
+  color: #fff;
+}
+
+.logout-btn {
+  margin-left: auto;
+}
+
+.app-content {
+  padding: 1.5rem;
+  max-width: 1080px;
+  margin: 0 auto;
+}

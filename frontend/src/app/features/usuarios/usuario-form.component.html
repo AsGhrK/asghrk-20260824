@@ -1,0 +1,57 @@
+@if (!isEdit()) {
+  <form class="card" style="max-width: 420px" [formGroup]="createForm" (ngSubmit)="submitCreate()">
+    <h1>Novo usuário</h1>
+
+    <div class="form-row">
+      <label for="codigo">Código</label>
+      <input id="codigo" type="text" formControlName="codigo" />
+    </div>
+
+    <div class="form-row">
+      <label for="login">Login</label>
+      <input id="login" type="text" formControlName="login" />
+    </div>
+
+    <div class="form-row">
+      <label for="senha">Senha</label>
+      <input id="senha" type="password" formControlName="senha" />
+    </div>
+
+    @if (errorMessage()) {
+      <p class="error-message">{{ errorMessage() }}</p>
+    }
+
+    <div class="form-actions">
+      <button type="submit" [disabled]="loading()">Salvar</button>
+      <a routerLink="/usuarios"><button type="button" class="secondary">Cancelar</button></a>
+    </div>
+  </form>
+} @else {
+  <form class="card" style="max-width: 420px" [formGroup]="editForm" (ngSubmit)="submitEdit()">
+    <h1>Editar usuário</h1>
+    <p>Login: <strong>{{ loginAtual() }}</strong></p>
+    <p class="hint">Apenas senha e status podem ser alterados.</p>
+
+    <div class="form-row">
+      <label for="senha">Nova senha (opcional)</label>
+      <input id="senha" type="password" formControlName="senha" placeholder="Deixe em branco para manter" />
+    </div>
+
+    <div class="form-row">
+      <label for="ativo">Status</label>
+      <select id="ativo" formControlName="ativo">
+        <option [ngValue]="true">Ativo</option>
+        <option [ngValue]="false">Inativo</option>
+      </select>
+    </div>
+
+    @if (errorMessage()) {
+      <p class="error-message">{{ errorMessage() }}</p>
+    }
+
+    <div class="form-actions">
+      <button type="submit" [disabled]="loading()">Salvar</button>
+      <a routerLink="/usuarios"><button type="button" class="secondary">Cancelar</button></a>
+    </div>
+  </form>
+}

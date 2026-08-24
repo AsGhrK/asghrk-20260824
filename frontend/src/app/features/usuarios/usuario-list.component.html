@@ -1,0 +1,45 @@
+<div class="card">
+  <div class="list-header">
+    <h1>Usuários</h1>
+    <a routerLink="/usuarios/novo"><button type="button">Novo usuário</button></a>
+  </div>
+
+  <div class="filters">
+    <button type="button" [class.secondary]="filtro() !== 'todos'" (click)="filtrarPor('todos')">Todos</button>
+    <button type="button" [class.secondary]="filtro() !== 'ativos'" (click)="filtrarPor('ativos')">Ativos</button>
+    <button type="button" [class.secondary]="filtro() !== 'inativos'" (click)="filtrarPor('inativos')">Inativos</button>
+  </div>
+
+  @if (loading()) {
+    <p>Carregando...</p>
+  } @else if (usuarios().length === 0) {
+    <p>Nenhum usuário encontrado.</p>
+  } @else {
+    <table>
+      <thead>
+        <tr>
+          <th>Código</th>
+          <th>Login</th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (usuario of usuarios(); track usuario.id) {
+          <tr>
+            <td>{{ usuario.codigo }}</td>
+            <td>{{ usuario.login }}</td>
+            <td>
+              <span class="status-badge" [class.ativo]="usuario.ativo" [class.inativo]="!usuario.ativo">
+                {{ usuario.ativo ? 'Ativo' : 'Inativo' }}
+              </span>
+            </td>
+            <td>
+              <a [routerLink]="['/usuarios', usuario.id, 'editar']">Editar</a>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</div>
