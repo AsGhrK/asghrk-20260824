@@ -6,6 +6,14 @@ Sistema para cadastro e gestão de **Usuários**, **Colaboradores** e **Unidades
 - **Frontend**: Angular (standalone components)
 - **Banco de dados**: PostgreSQL (via Docker)
 
+## Sobre este desafio
+
+Projeto desenvolvido como desafio técnico para o processo seletivo de **Programador(a) Júnior**
+do **Grupo Rodonaves** (Ribeirão Preto - SP). A stack pedida na vaga — **C#** (.NET Core / APIs),
+**PostgreSQL** e **Angular** — é a mesma usada neste repositório, cobrindo as funcionalidades
+descritas no enunciado (cadastro/atualização/listagem de Usuários, Colaboradores e Unidades) mais
+os diferenciais propostos: banco via Docker e autenticação Bearer token.
+
 ## Arquitetura
 
 O backend é dividido em 4 camadas, cada uma em seu próprio projeto .NET:
